@@ -1,0 +1,136 @@
+//
+//  AuthMainView.swift
+//  Dostavista
+//
+//  Created by Abylaikhan Abilkayr on 07.11.2025.
+//
+
+import SwiftUI
+
+struct AuthMainView: View {
+
+    @State var vm: AuthMainViewModel
+
+    init(vm: AuthMainViewModel) {
+        _vm = State(initialValue: vm)
+    }
+
+    var body: some View {
+        ZStack {
+            VStack(spacing: 24.fitH) {
+                
+                header
+                VStack(spacing: 12.fitH) {
+                    FeatureRow(
+                        systemIcon: .timeMainIcon,
+                        title: "Свободный график",
+                        subtitle: "Бери заказ хоть сейчас"
+                    )
+                    FeatureRow(
+                        systemIcon: .geoMiniMainIcon,
+                        title: "Рядом с домом",
+                        subtitle: "Доставляй в своём районе"
+                    )
+                    FeatureRow(
+                        systemIcon: .moneyMainIcon,
+                        title: "Быстрый доход",
+                        subtitle: "Всегда под рукой"
+                    )
+                    FeatureRow(
+                        systemIcon: .dateMainIcon,
+                        title: "Ежедневные выплаты",
+                        subtitle: "С Пн по Чт"
+                    )
+                }
+
+                Spacer()
+                
+                VStack(spacing: 12.fitH) {
+                    Button(action: { vm.sighUp() }) {
+                        Text("Зарегистрироваться")
+                            .font(.system(size: 16.fitW, weight: .medium))
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16.fitH)
+                            .background(.purple8B5CF6)
+                            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                            .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 4)
+                    }
+                    .buttonStyle(.plain)
+                    
+                    Button(action: { vm.signIn() }) {
+                        Text("У меня уже есть аккаунт")
+                            .font(.system(size: 16.fitW, weight: .medium))
+                            .foregroundStyle(.black)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16.fitH)
+                            .background(Color.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    }
+                    .buttonStyle(.plain)
+
+                }
+                .padding(.top, 8.fitH)
+            }
+            .padding(.horizontal, 24.fitW)
+            .padding(.top, 20.fitH)
+            .padding(.bottom, 10.fitH)
+        }
+        .background(Color.grayF2F2F2.ignoresSafeArea())
+        .navigationBarHidden(true)
+    }
+
+    private var header: some View {
+        VStack(alignment: .center, spacing: .zero) {
+            Image(.geoMainIcon)
+                .resizable()
+                .frame(width: 80.fitH, height: 80.fitH)
+                .padding(.bottom, 24.fitH)
+            
+            Text("Dostavista")
+                .font(.system(size: 28.fitW, weight: .bold))
+                .foregroundStyle(.black)
+                .padding(.top, 4.fitH)
+                .padding(.bottom, 8.fitH)
+
+            Text("Работа курьером")
+                .font(.system(size: 17.fitW, weight: .regular))
+                .foregroundStyle(.black.opacity(0.4))
+        }
+    }
+}
+
+// MARK: - Компоненты
+
+private struct FeatureRow: View {
+    let systemIcon: ImageResource
+    let title: String
+    let subtitle: String
+
+    var body: some View {
+        HStack(spacing: 12.fitH) {
+            Image(systemIcon)
+                .resizable()
+                .frame(width: 48.fitH, height: 48.fitH)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.system(size: 20.fitW, weight: .semibold))
+                    .foregroundStyle(.black)
+                    .lineLimit(1)
+                
+                Text(subtitle)
+                    .font(.system(size: 15.fitW, weight: .regular))
+                    .foregroundStyle(.black.opacity(0.4))
+                    .lineLimit(1)
+            }
+
+            Spacer()
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 18.fitH)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .shadow(color: .black.opacity(0.1), radius: 1, x: 0, y: 2)
+    }
+}
