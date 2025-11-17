@@ -109,6 +109,7 @@ struct RootView: View {
         } else {
             AuthNavigationHost {
                 mainStarted = true
+                ApphudUserManager.shared.start()
             }
         }
     }
