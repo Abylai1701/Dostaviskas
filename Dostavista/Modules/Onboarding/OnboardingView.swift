@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct OnboardingView: View {
     @State private var step: OnbEnum = .onb1
@@ -43,6 +44,7 @@ struct OnboardingView: View {
                     case .onb3:
                         step = .onb4
                     case .onb4:
+                        requestReviewOrOpenStore()
                         onbEnd()
                     }
                 } label: {
@@ -60,6 +62,14 @@ struct OnboardingView: View {
             .padding(.horizontal, 20.fitW)
             .padding(.bottom, 24)
             .safeAreaPadding(.bottom)
+        }
+    }
+    
+    func requestReviewOrOpenStore() {
+        if let scene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first(where: { $0.activationState == .foregroundActive }) {
+            SKStoreReviewController.requestReview(in: scene)
         }
     }
 }
