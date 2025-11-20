@@ -21,6 +21,30 @@ struct RegisterVIew: View {
     @State private var showPolicy: Bool = false
     
     @State private var showErrorAlert = false
+    @State private var showCitySheet = false
+
+    let cities = [
+        "Москва",
+        "Санкт-Петербург",
+        "Новосибирск",
+        "Екатеринбург",
+        "Казань",
+        "Нижний Новгород",
+        "Челябинск",
+        "Омск",
+        "Самара",
+        "Ростов-на-Дону",
+        "Уфа",
+        "Красноярск",
+        "Пермь",
+        "Воронеж",
+        "Волгоград",
+        "Саратов",
+        "Тольятти",
+        "Краснодар",
+        "Ижевск",
+        "Барнаул"
+    ]
 
     private var isPhoneValid: Bool {
         rawDigits.count == 11 && rawDigits.first == "7"
@@ -65,25 +89,37 @@ struct RegisterVIew: View {
                             Text("Город")
                                 .font(.system(size: 13.fitW, weight: .medium))
                                 .foregroundStyle(.black.opacity(0.4))
-                            
-                            TextField("Москва", text: $vm.city)
-                                .font(.system(size: 17.fitW))
-                                .foregroundStyle(.black)
-                                .frame(height: 54)
-                                .padding(.horizontal, 16.fitW)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 14)
-                                        .fill(.white)
-                                        .strokeBorder(Color.black.opacity(0.1), lineWidth: 1)
-                                )
+
+                            HStack(spacing: 0) {
+                                TextField("Введите или выберите город", text: $vm.city)
+                                    .font(.system(size: 17.fitW))
+                                    .foregroundStyle(.black)
+                                
+                                Button {
+                                    showCitySheet = true
+                                } label: {
+                                    Image(systemName: "chevron.down")
+                                        .foregroundStyle(.black.opacity(0.4))
+                                        .padding(.horizontal, 12)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            .frame(height: 54)
+                            .padding(.horizontal, 16.fitW)
+                            .background(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .fill(.white)
+                                    .strokeBorder(Color.black.opacity(0.1), lineWidth: 1)
+                            )
                         }
+
 
                         VStack(alignment: .leading, spacing: 8.fitH) {
                             Text("Email")
                                 .font(.system(size: 13.fitW, weight: .medium))
                                 .foregroundStyle(.black.opacity(0.4))
                             
-                            TextField("Почта", text: $vm.mail)
+                            TextField("Почта (необязательно)", text: $vm.mail)
                                 .keyboardType(.emailAddress)
                                 .font(.system(size: 17.fitW))
                                 .foregroundStyle(.black)
@@ -112,7 +148,7 @@ struct RegisterVIew: View {
                     .padding(.top, 20.fitH)
                 }
                 .background(.grayF2F2F2)
-                
+
                 bottomButton
             }
             
@@ -140,6 +176,9 @@ struct RegisterVIew: View {
         .hideKeyboardOnTap()
         .safari(urlString: "https://docs.google.com/document/d/1MJXu-7E_GZil58clMVkBvQFbkbcB6PLxIxGic_fob_s/edit?usp=sharing", isPresented: $showTerms)
         .safari(urlString: "https://docs.google.com/document/d/1Tck59S23Zh6vMMMLqwpy65bbV7LeadlGcsGbcHk4KWo/edit?tab=t.0", isPresented: $showPolicy)
+        .sheet(isPresented: $showCitySheet) {
+            citySheet
+        }
         .toolbar(.hidden, for: .navigationBar)
     }
     
@@ -293,5 +332,53 @@ struct RegisterVIew: View {
         .padding(.horizontal, 24.fitW)
         .padding(.bottom, 10.fitH)
         .padding(.top, 20.fitH)
+    }
+    
+    // MARK: - City Sheet
+    private var citySheet: some View {
+        NavigationView {
+            ScrollView {
+                LazyVStack(spacing: 0) {
+                    ForEach(cities, id: \.self) { city in
+                        Button {
+                            vm.city = city
+                            showCitySheet = false
+                        } label: {
+                            HStack {
+                                Text(city)
+                                    .foregroundStyle(.black)
+                                    .font(.system(size: 17))
+                                Spacer()
+                                
+                                if vm.city == city {
+                                    Image(systemName: "checkmark")
+                                        .foregroundStyle(Color("purple8B5CF6"))
+                                        .font(.system(size: 16, weight: .semibold))
+                                }
+                            }
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 16)
+                        }
+                        .buttonStyle(.plain)
+                        
+                        if city != cities.last {
+                            Divider()
+                                .padding(.leading, 24)
+                        }
+                    }
+                }
+            }
+            .background(Color.grayF2F2F2)
+            .navigationTitle("Выберите город")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Закрыть") {
+                        showCitySheet = false
+                    }
+                    .foregroundStyle(Color("purple8B5CF6"))
+                }
+            }
+        }
     }
 }

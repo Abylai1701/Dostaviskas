@@ -22,16 +22,16 @@ struct OnboardingView: View {
         .overlay(alignment: .bottom) {
             VStack(alignment: .center, spacing: .zero) {
                 Text(step.title1)
-                    .font(.system(size: 28, weight: .heavy))
+                    .font(.system(size: 34, weight: .bold))
                     .foregroundStyle(.black)
                 Text(step.title2)
-                    .font(.system(size: 28, weight: .heavy))
+                    .font(.system(size: 34, weight: .bold))
                     .foregroundStyle(.purple8B5CF6)
                     .padding(.bottom, 8)
                 
                 Text(step.descr)
                     .font(.system(size: 17, weight: .regular))
-                    .foregroundStyle(.black.opacity(0.6))
+                    .foregroundStyle(.gray6B7280)
                     .multilineTextAlignment(.center)
                     .padding(.bottom)
                 
@@ -101,39 +101,39 @@ enum OnbEnum {
     var title1: String {
         switch self {
         case .onb1:
-            "Выбор"
+            "Свободный"
         case .onb2:
-            "Бери заказы"
+            "Быстрый"
         case .onb3:
             "Мы ценим"
         case .onb4:
-            "Следи за"
+            "Следи"
         }
     }
     
     var title2: String {
         switch self {
         case .onb1:
-            "пользователей"
+            "график"
         case .onb2:
-            "получай оплату сразу"
+            "заработок"
         case .onb3:
             "ваше мнение"
         case .onb4:
-            "своим прогрессом"
+            "за прогрессом"
         }
     }
     
     var descr: String {
         switch self {
         case .onb1:
-            "Работай курьером по гибкому графику – выбирай удобные маршруты и получай оплату сразу после доставки"
+            "Выбирай время и темп, который подходит тебе, зарабатывай без строгих смен и расписаний"
         case .onb2:
-            "Мы показываем заказы рядом – выбирай по маршруту и времени, доставляй пешком, на авто или самокате"
+            "Работай курьером, выбирай удобные маршруты и получай оплату сразу после доставки"
         case .onb3:
             "Поделитесь своим мнением о нашем приложении, чтобы мы могли сделать его лучше!"
         case .onb4:
-            "Смотри, как растёт твой доход, отслеживай бонусы и улучшай рейтинг "
+            "Смотри, как растёт твой доход, отслеживай бонусы и улучшай рейтинг, чтобы достичь новых высот"
         }
     }
 }

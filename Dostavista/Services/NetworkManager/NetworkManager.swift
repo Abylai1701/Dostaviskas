@@ -69,6 +69,7 @@ final class NetworkManager {
         email: String
     ) async throws -> RegisterResponse {
         let params: [String: Any] = [
+            "app_name": "Курьериум - Работа Курьером",
             "full_name": fullName,
             "city": city,
             "phone": phone,
