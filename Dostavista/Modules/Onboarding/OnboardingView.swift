@@ -43,8 +43,8 @@ struct OnboardingView: View {
                         step = .onb3
                     case .onb3:
                         step = .onb4
-                    case .onb4:
                         requestReviewOrOpenStore()
+                    case .onb4:
                         onbEnd()
                     }
                 } label: {

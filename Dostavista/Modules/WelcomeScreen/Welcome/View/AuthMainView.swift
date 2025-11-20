@@ -87,7 +87,7 @@ struct AuthMainView: View {
                 .frame(width: 80.fitH, height: 80.fitH)
                 .padding(.bottom, 24.fitH)
             
-            Text("Dostavista")
+            Text("Курьериум")
                 .font(.system(size: 28.fitW, weight: .bold))
                 .foregroundStyle(.black)
                 .padding(.top, 4.fitH)
