@@ -17,33 +17,21 @@ struct AuthMainView: View {
 
     var body: some View {
         ZStack {
-            VStack(spacing: 24.fitH) {
+            VStack(spacing: .zero) {
                 
                 header
-                VStack(spacing: 12.fitH) {
-                    FeatureRow(
-                        systemIcon: .timeMainIcon,
-                        title: "Свободный график",
-                        subtitle: "Бери заказ хоть сейчас"
+                Image(.cur)
+                    .resizable()
+                    .frame(width: UIScreen.main.bounds.width, height: 400.fitH)
+                    .mask(
+                        LinearGradient(
+                            colors: [.black, .black, .black, .black, .black, .clear],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
                     )
-                    FeatureRow(
-                        systemIcon: .geoMiniMainIcon,
-                        title: "Рядом с домом",
-                        subtitle: "Доставляй в своём районе"
-                    )
-                    FeatureRow(
-                        systemIcon: .moneyMainIcon,
-                        title: "Быстрый доход",
-                        subtitle: "Всегда под рукой"
-                    )
-                    FeatureRow(
-                        systemIcon: .dateMainIcon,
-                        title: "Ежедневные выплаты",
-                        subtitle: "С Пн по Чт"
-                    )
-                }
-
-                Spacer()
+                
+                Spacer(minLength: 0)
                 
                 VStack(spacing: 12.fitH) {
                     Button(action: { vm.sighUp() }) {
@@ -57,7 +45,8 @@ struct AuthMainView: View {
                             .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 4)
                     }
                     .buttonStyle(.plain)
-                    
+                    .padding(.horizontal, 24.fitW)
+
                     Button(action: { vm.signIn() }) {
                         Text("У меня уже есть аккаунт")
                             .font(.system(size: 16.fitW, weight: .medium))
@@ -68,15 +57,21 @@ struct AuthMainView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                     }
                     .buttonStyle(.plain)
+                    .padding(.horizontal, 24.fitW)
 
                 }
                 .padding(.top, 8.fitH)
             }
-            .padding(.horizontal, 24.fitW)
             .padding(.top, 20.fitH)
             .padding(.bottom, 10.fitH)
         }
-        .background(Color.grayF2F2F2.ignoresSafeArea())
+        .background(
+            LinearGradient(
+                colors: [.blueCEEBFE, .blueCEEBFE,  .grayF2F2F2],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        )
         .navigationBarHidden(true)
     }
 
@@ -102,7 +97,7 @@ struct AuthMainView: View {
 
 // MARK: - Компоненты
 
-private struct FeatureRow: View {
+struct FeatureRow: View {
     let systemIcon: ImageResource
     let title: String
     let subtitle: String
@@ -133,4 +128,8 @@ private struct FeatureRow: View {
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .shadow(color: .black.opacity(0.1), radius: 1, x: 0, y: 2)
     }
+}
+
+#Preview {
+    AuthMainView(vm: AuthMainViewModel(coordinator: AuthMainCoordinator(router: AuthRouter())))
 }

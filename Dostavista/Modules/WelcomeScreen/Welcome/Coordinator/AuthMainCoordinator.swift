@@ -19,14 +19,8 @@ final class AuthMainCoordinator: AuthMainCoordinatorProtocol {
     
     init(router: AuthRouter) {
         self.router = router
-        
-        print("Create AuthMainCoordinator")
     }
-    
-    deinit {
-        print("Kill AuthMainCoordinator")
-    }
-    
+
     func goAuth() {
         router.push(.auth)
     }

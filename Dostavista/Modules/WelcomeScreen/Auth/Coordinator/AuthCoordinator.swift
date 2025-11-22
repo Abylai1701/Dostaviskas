@@ -18,19 +18,15 @@ final class AuthCoordinator: AuthCoordinatorProtocol {
     
     init(router: AuthRouter) {
         self.router = router
-        
-        print("Create AuthCoordinator")
     }
     
-    deinit {
-        print("Kill AuthCoordinator")
-    }
     
     func goToApp() {
         print("GoToApp")
     }
     
     func pop() {
+        print("AuthCoordinator.pop router:", ObjectIdentifier(router))
         router.pop()
     }
 }

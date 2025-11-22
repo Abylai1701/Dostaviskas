@@ -21,6 +21,7 @@ final class RegisterCoordinator: RegisterCoordinatorProtocol {
     }
     
     func pop() {
+        print("RegisterCoordinator.pop router:", ObjectIdentifier(router))
         router.pop()
     }
     func start() {

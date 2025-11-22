@@ -14,6 +14,7 @@ struct RegisterVIew: View {
         _vm = State(initialValue: vm)
     }
     
+    
     @State private var rawDigits: String = "7"
     @State private var agreed: Bool = false
     
@@ -22,136 +23,118 @@ struct RegisterVIew: View {
     
     @State private var showErrorAlert = false
     @State private var showCitySheet = false
-
-    let cities = [
-        "Москва",
-        "Санкт-Петербург",
-        "Новосибирск",
-        "Екатеринбург",
-        "Казань",
-        "Нижний Новгород",
-        "Челябинск",
-        "Омск",
-        "Самара",
-        "Ростов-на-Дону",
-        "Уфа",
-        "Красноярск",
-        "Пермь",
-        "Воронеж",
-        "Волгоград",
-        "Саратов",
-        "Тольятти",
-        "Краснодар",
-        "Ижевск",
-        "Барнаул"
-    ]
-
+    
+    @State private var robot = false
+    
     private var isPhoneValid: Bool {
         rawDigits.count == 11 && rawDigits.first == "7"
     }
     
-    private var continueEnabled: Bool {
-        isPhoneValid && agreed
+    private var phoneEnabled: Bool {
+        isPhoneValid
     }
     
+    private var headerTitle: String {
+        switch vm.step {
+        case .phone:
+            "Контактные данные"
+        case .verify:
+            "Верификация"
+        case .fio:
+            "Личные данные"
+        case .city:
+            "Выберите регион"
+        case .done:
+            "Done"
+        }
+    }
+    
+    private var headerStep: String {
+        switch vm.step {
+        case .phone:
+            "1/5"
+        case .verify:
+            "2/5"
+        case .fio:
+            "3/5"
+        case .city:
+            "4/5"
+        case .done:
+            "5/5"
+        }
+    }
     // MARK: - Body
     var body: some View {
         ZStack {
-            // Фон
-            Color.white.ignoresSafeArea()
             
-            VStack(spacing: .zero) {
-                header
+            if vm.step != .done {
                 
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack(spacing: 16.fitH) {
-                        topCard
-                            .padding(.bottom)
-                        
-                        VStack(alignment: .leading, spacing: 8.fitH) {
-                            Text("ФИО")
-                                .font(.system(size: 13.fitW, weight: .medium))
-                                .foregroundStyle(.black.opacity(0.4))
-                            
-                            TextField("Иванов Иван Иванович", text: $vm.fioText)
-                                .font(.system(size: 17.fitW))
-                                .foregroundStyle(.black)
-                                .frame(height: 54)
-                                .padding(.horizontal, 16.fitW)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 14)
-                                        .fill(.white)
-                                        .strokeBorder(Color.black.opacity(0.1), lineWidth: 1)
-                                )
-                        }
-                        
-                        VStack(alignment: .leading, spacing: 8.fitH) {
-                            Text("Город")
-                                .font(.system(size: 13.fitW, weight: .medium))
-                                .foregroundStyle(.black.opacity(0.4))
+                Color.white.ignoresSafeArea()
 
-                            HStack(spacing: 0) {
-                                TextField("Введите или выберите город", text: $vm.city)
-                                    .font(.system(size: 17.fitW))
-                                    .foregroundStyle(.black)
-                                
-                                Button {
-                                    showCitySheet = true
-                                } label: {
-                                    Image(systemName: "chevron.down")
-                                        .foregroundStyle(.black.opacity(0.4))
-                                        .padding(.horizontal, 12)
-                                }
-                                .buttonStyle(.plain)
-                            }
-                            .frame(height: 54)
-                            .padding(.horizontal, 16.fitW)
-                            .background(
-                                RoundedRectangle(cornerRadius: 14)
-                                    .fill(.white)
-                                    .strokeBorder(Color.black.opacity(0.1), lineWidth: 1)
-                            )
-                        }
-
-
-                        VStack(alignment: .leading, spacing: 8.fitH) {
-                            Text("Email")
-                                .font(.system(size: 13.fitW, weight: .medium))
-                                .foregroundStyle(.black.opacity(0.4))
-                            
-                            TextField("Почта (необязательно)", text: $vm.mail)
-                                .keyboardType(.emailAddress)
-                                .font(.system(size: 17.fitW))
-                                .foregroundStyle(.black)
-                                .frame(height: 54)
-                                .padding(.horizontal, 16.fitW)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 14)
-                                        .fill(.white)
-                                        .strokeBorder(Color.black.opacity(0.1), lineWidth: 1)
-                                )
-                        }
-                        
-                        VStack(alignment: .leading, spacing: 8.fitH) {
-                            Text("Номер телефона")
-                                .font(.system(size: 13.fitW, weight: .medium))
-                                .foregroundStyle(.black.opacity(0.4))
-                            
-                            PhoneMaskField(phone: $vm.phoneText, rawDigits: $rawDigits)
-                        }
-                        
-                        consentCard
-                        
-                        securityCard
-                    }
-                    .padding(.horizontal, 24)
-                    .padding(.top, 20.fitH)
+                VStack(spacing: .zero) {
+                    header
+                    
+                    superContent
+                    
+                    bottomButton
                 }
-                .background(.grayF2F2F2)
+            } else {
+                
+                Color.grayF2F2F2.ignoresSafeArea()
 
-                bottomButton
+                VStack(spacing: .zero) {
+                    headerForDone
+                        .padding(.bottom, 32.fitH)
+                        .padding(.horizontal)
+
+                    FeatureRow(
+                        systemIcon: .timeMainIcon,
+                        title: "Свободный график",
+                        subtitle: "Бери заказ хоть сейчас"
+                    )
+                    .padding(.bottom, 12.fitH)
+                    .padding(.horizontal)
+
+                    FeatureRow(
+                        systemIcon: .geoMiniMainIcon,
+                        title: "Рядом с домом",
+                        subtitle: "Доставляй в своём районе"
+                    )
+                    .padding(.bottom, 12.fitH)
+                    .padding(.horizontal)
+
+                    FeatureRow(
+                        systemIcon: .moneyMainIcon,
+                        title: "Быстрый доход",
+                        subtitle: "Всегда под рукой"
+                    )
+                    .padding(.bottom, 12.fitH)
+                    .padding(.horizontal)
+
+                    FeatureRow(
+                        systemIcon: .dateMainIcon,
+                        title: "Ежедневные выплаты",
+                        subtitle: "С Пн по Чт"
+                    )
+                    .padding(.horizontal)
+
+                    Spacer()
+                    
+                    bottomButton
+                        .background(.white)
+                }
+                .padding(.top, 32)
+                .overlay(alignment: .topLeading) {
+                    Button {
+                        vm.pop()
+                    } label: {
+                        Image(.backIcon)
+                            .resizable()
+                            .frame(width: 20, height: 16)
+                            .padding(16)
+                    }
+                }
             }
-            
             if vm.isLoading {
                 ZStack {
                     Color.black.opacity(0.3).ignoresSafeArea()
@@ -176,17 +159,134 @@ struct RegisterVIew: View {
         .hideKeyboardOnTap()
         .safari(urlString: "https://docs.google.com/document/d/1MJXu-7E_GZil58clMVkBvQFbkbcB6PLxIxGic_fob_s/edit?usp=sharing", isPresented: $showTerms)
         .safari(urlString: "https://docs.google.com/document/d/1Tck59S23Zh6vMMMLqwpy65bbV7LeadlGcsGbcHk4KWo/edit?tab=t.0", isPresented: $showPolicy)
-        .sheet(isPresented: $showCitySheet) {
-            citySheet
-        }
         .toolbar(.hidden, for: .navigationBar)
     }
     
-    // MARK: - Header (кастомный)
+    private var phoneStep: some View {
+        VStack(spacing: 16.fitH) {
+            
+            VStack(alignment: .leading, spacing: 8.fitH) {
+                Text("Номер телефона")
+                    .font(.system(size: 13.fitW, weight: .medium))
+                    .foregroundStyle(.black.opacity(0.4))
+                
+                PhoneMaskField(phone: $vm.phoneText, rawDigits: $rawDigits)
+            }
+            
+            consentCard
+            
+            securityCard
+        }
+        .padding(.horizontal, 24)
+        .padding(.top, 20.fitH)
+    }
+    
+    @ViewBuilder
+    private var superContent: some View {
+        switch vm.step {
+        case .phone:
+            ScrollView(.vertical, showsIndicators: false) {
+                phoneStep
+            }
+            .background(.grayF2F2F2)
+        case .verify:
+            ScrollView(.vertical, showsIndicators: false) {
+                verifyStep
+            }
+            .background(.grayF2F2F2)
+        case .fio:
+            ScrollView(.vertical, showsIndicators: false) {
+                fioStep
+            }
+            .background(.grayF2F2F2)
+        case .city:
+            citiesStep
+                .background(.grayF2F2F2)
+        case .done:
+            phoneStep
+        }
+    }
+    
+    private var verifyStep: some View {
+        VStack(alignment: .leading, spacing: .zero) {
+            HStack(alignment: .center, spacing: 8) {
+                Button {
+                    robot.toggle()
+                } label: {
+                    RoundedRectangle(cornerRadius: 4, style: .continuous)
+                        .fill(robot ? .purple8B5CF6 : .clear)
+                        .stroke(Color("purple8B5CF6"), lineWidth: 2)
+                        .frame(width: 24, height: 24)
+                }
+                Text("Я не робот")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundColor(.black)
+                
+                Spacer()
+            }
+            .padding(.bottom, 8)
+            
+            VStack(alignment: .leading, spacing: .zero) {
+                Text("Нажмите, чтобы продолжить")
+                    .font(.system(size: 15, weight: .regular))
+                    .foregroundColor(.black.opacity(0.5))
+                    .padding(.bottom, 14)
+                
+                Text("Обработка данных • Поддержка")
+                    .font(.system(size: 13, weight: .regular))
+                    .foregroundColor(.black.opacity(0.3))
+            }
+            
+        }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .fill(Color.white)
+                .stroke(Color.black.opacity(0.1), lineWidth: 1)
+        )
+        .frame(maxWidth: .infinity)
+        .padding()
+    }
+    
+    private var fioStep: some View {
+        VStack(spacing: 16.fitH) {
+            
+            VStack(alignment: .leading, spacing: 8.fitH) {
+                Text("ФИО")
+                    .font(.system(size: 13.fitW, weight: .medium))
+                    .foregroundStyle(.black.opacity(0.4))
+                
+                TextField("Иванов Иван Иванович", text: $vm.fioText)
+                    .font(.system(size: 17.fitW))
+                    .foregroundStyle(.black)
+                    .frame(height: 54)
+                    .padding(.horizontal, 16.fitW)
+                    .background(
+                        RoundedRectangle(cornerRadius: 14)
+                            .fill(.white)
+                            .strokeBorder(Color.black.opacity(0.1), lineWidth: 1)
+                    )
+            }
+        }
+        .padding(.horizontal, 24)
+        .padding(.top, 20.fitH)
+    }
+    
     private var header: some View {
         HStack {
             Button {
-                vm.pop()
+                switch vm.step {
+                case .phone:
+                    vm.pop()
+                case .verify:
+                    vm.step = .phone
+                case .fio:
+                    vm.step = .verify
+                case .city:
+                    vm.step = .fio
+                case .done:
+                    vm.pop()
+                }
             } label: {
                 Image(.backIcon)
                     .resizable()
@@ -196,14 +296,75 @@ struct RegisterVIew: View {
             .buttonStyle(.plain)
             
             Spacer()
-        }
-        .overlay {
-            Text("Вход")
+            
+            Text(headerTitle)
                 .font(.system(size: 17.fitW, weight: .semibold))
                 .foregroundStyle(.black)
+            
+            Spacer()
+            
+            Text(headerStep)
+                .font(.system(size: 17.fitW, weight: .semibold))
+                .foregroundStyle(.purple8B5CF6)
+                .padding(.trailing)
         }
         .padding(.bottom, 8)
     }
+    
+    private var citiesStep: some View {
+        VStack(spacing: 0) {
+            
+            HStack(spacing: 6) {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.black.opacity(0.5))
+                
+                TextField("Поиск...", text: $vm.searchText)
+                    .font(.system(size: 17, weight: .medium))
+                    .foregroundStyle(.black)
+                    .textInputAutocapitalization(.never)
+                    .disableAutocorrection(true)
+            }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(Color.white)
+                    .stroke(Color.black.opacity(0.1), lineWidth: 1)
+            )
+            .padding(.horizontal)
+            .padding(.vertical, 20)
+            
+            // Список городов
+            ScrollView {
+                LazyVStack(spacing: 0) {
+                    ForEach(vm.filteredCities, id: \.self) { c in
+                        Button {
+                            vm.city = c
+                        } label: {
+                            HStack {
+                                Text(c)
+                                    .foregroundStyle(.black)
+                                    .font(.system(size: 17, weight: .medium))
+                                
+                                Spacer()
+                                
+                                if vm.city == c {
+                                    Image(.checkIcon)
+                                        .resizable()
+                                        .frame(width: 20, height: 20)
+                                }
+                            }
+                            .padding(.horizontal)
+                            .padding(.bottom, 24)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+            .background(Color.grayF2F2F2)
+        }
+    }
+    
     
     // MARK: - Верхний блок с иконкой и заголовком
     private var topCard: some View {
@@ -223,64 +384,18 @@ struct RegisterVIew: View {
     
     // MARK: - Чекбокс согласия
     private var consentCard: some View {
-        VStack(alignment: .leading) {
-            HStack(alignment: .top, spacing: 12) {
-                Button {
-                    withAnimation(.snappy) {
-                        agreed.toggle()
-                    }
-                } label: {
-                    Image(agreed ? .agreeIcon : .notAgreeIcon)
-                        .resizable()
-                        .frame(width: 16, height: 16)
-                        .offset(y: 1)
-                }
-                .buttonStyle(.plain)
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(spacing: 4) {
-                        Text("Я соглашаюсь с")
-                            .font(.system(size: 15.fitH, weight: .regular))
-                            .foregroundStyle(.black)
-                        Button {
-                            showTerms = true
-                        } label: {
-                            Text("правилами сервиса")
-                                .font(.system(size: 15.fitH, weight: .semibold))
-                                .foregroundStyle(Color("purple8B5CF6"))
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    HStack(spacing: 4) {
-                        Text("и")
-                            .font(.system(size: 15.fitH, weight: .regular))
-                            .foregroundStyle(.black)
-                        Button {
-                            showPolicy = true
-                        } label: {
-                            Text("политикой обработки данных")
-                                .font(.system(size: 15.fitH, weight: .semibold))
-                                .foregroundStyle(Color("purple8B5CF6"))
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                Spacer(minLength: 0)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.horizontal)
-            .padding(.vertical)
-        }
-        .background(
-            agreed
-            ? Color("purple8B5CF6").opacity(0.15)
-            : Color.white
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .stroke(Color.black.opacity(0.1), lineWidth: 1)
-        )
+        Text("Регистрируясь или входя в приложение, я подтверждаю согласие с Правилами использования сервиса «Достависта» и Политикой обработки персональных данных.")
+            .font(.system(size: 15))
+            .lineSpacing(3)
+            .padding()
+            .foregroundStyle(.black)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color("purple8B5CF6").opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .stroke(Color.black.opacity(0.1), lineWidth: 1)
+            )
     }
     
     // MARK: - Инфо блок безопасности
@@ -316,9 +431,32 @@ struct RegisterVIew: View {
     
     private var bottomButton: some View {
         Button {
-            vm.register()
+            switch vm.step {
+            case .phone:
+                if phoneEnabled {
+                    vm.step = .verify
+                } else {
+                    vm.errorMessage = "Ошибка номера"
+                }
+            case .verify:
+                if robot {
+                    vm.step = .fio
+                } else {
+                    vm.errorMessage = "Подтвердите что вы не робот"
+                }
+            case .fio:
+                if vm.fioText.trimmingCharacters(in: .whitespaces).isEmpty {
+                    vm.errorMessage = "Введите ваше ФИО"
+                } else {
+                    vm.step = .city
+                }
+            case .city:
+                vm.register()
+            case .done:
+                vm.pop()
+            }
         } label: {
-            Text("Продолжить")
+            Text(vm.step == .done ? "Начать работу" : "Продолжить")
                 .font(.system(size: 16.fitW, weight: .medium))
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
@@ -327,58 +465,35 @@ struct RegisterVIew: View {
                 .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                 .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 4)
         }
-        .disabled(!continueEnabled)
         .buttonStyle(.plain)
         .padding(.horizontal, 24.fitW)
         .padding(.bottom, 10.fitH)
         .padding(.top, 20.fitH)
     }
     
-    // MARK: - City Sheet
-    private var citySheet: some View {
-        NavigationView {
-            ScrollView {
-                LazyVStack(spacing: 0) {
-                    ForEach(cities, id: \.self) { city in
-                        Button {
-                            vm.city = city
-                            showCitySheet = false
-                        } label: {
-                            HStack {
-                                Text(city)
-                                    .foregroundStyle(.black)
-                                    .font(.system(size: 17))
-                                Spacer()
-                                
-                                if vm.city == city {
-                                    Image(systemName: "checkmark")
-                                        .foregroundStyle(Color("purple8B5CF6"))
-                                        .font(.system(size: 16, weight: .semibold))
-                                }
-                            }
-                            .padding(.horizontal, 24)
-                            .padding(.vertical, 16)
-                        }
-                        .buttonStyle(.plain)
-                        
-                        if city != cities.last {
-                            Divider()
-                                .padding(.leading, 24)
-                        }
-                    }
-                }
-            }
-            .background(Color.grayF2F2F2)
-            .navigationTitle("Выберите город")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Закрыть") {
-                        showCitySheet = false
-                    }
-                    .foregroundStyle(Color("purple8B5CF6"))
-                }
-            }
+    private var headerForDone: some View {
+        VStack(alignment: .center, spacing: .zero) {
+            Image(.champIcon)
+                .resizable()
+                .frame(width: 80.fitH, height: 80.fitH)
+                .padding(.bottom, 24.fitH)
+            
+            Text("Вы зарегестрировались!")
+                .font(.system(size: 22.fitW, weight: .bold))
+                .foregroundStyle(.black)
+                .padding(.top, 4.fitH)
+                .padding(.bottom, 8.fitH)
+
+            Text("Теперь вы можете принимать заказы и начать зарабатывать")
+                .font(.system(size: 16.fitW, weight: .regular))
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.black.opacity(0.4))
         }
     }
+}
+
+#Preview {
+    RegisterVIew(
+        vm: RegisterViewModel(coordinator: RegisterCoordinator(router: AuthRouter()), authEnd: {})
+    )
 }

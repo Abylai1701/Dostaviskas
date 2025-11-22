@@ -8,29 +8,24 @@
 import SwiftUI
 import Combine
 
+
 struct AuthNavigationHost: View {
-    @StateObject private var router = AuthRouter()
+    @StateObject private var router: AuthRouter
     private let mainVM: AuthMainViewModel
     private let authVM: AuthViewModel
     private let registerVM: RegisterViewModel
-
-    var authEnd: () -> Void
     
-    init(authEnd: @escaping () -> Void) {
-        self.authEnd = authEnd
-
-        let router = AuthRouter()
-
+    init(router: AuthRouter, authEnd: @escaping () -> Void) {
+        _router = StateObject(wrappedValue: router)
+        
         let mainCoordinator = AuthMainCoordinator(router: router)
         mainVM = AuthMainViewModel(coordinator: mainCoordinator)
-
+        
         let authCoordinator = AuthCoordinator(router: router)
         authVM = AuthViewModel(coordinator: authCoordinator, authEnd: authEnd)
         
         let registerCoordinator = RegisterCoordinator(router: router)
         registerVM = RegisterViewModel(coordinator: registerCoordinator, authEnd: authEnd)
-
-        _router = StateObject(wrappedValue: router)
     }
 
     var body: some View {
@@ -59,8 +54,11 @@ final class AuthRouter: ObservableObject {
 
     func push(_ route: AuthRoute) {
         path.append(route)
+        
+        print("push", route, "router:", ObjectIdentifier(self))
     }
     func pop() {
+        print("pop router:", ObjectIdentifier(self))
         if !path.isEmpty {
             _ = path.removeLast()
         }

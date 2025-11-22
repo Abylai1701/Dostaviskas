@@ -25,6 +25,8 @@ struct RootView: View {
     
     @State private var tabBarHeight: CGFloat = 0
     
+    @StateObject private var authRouter = AuthRouter()
+
     @AppStorage("mainStarted") private var mainStarted = false
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
 
@@ -107,7 +109,7 @@ struct RootView: View {
                 }
             }
         } else {
-            AuthNavigationHost {
+            AuthNavigationHost(router: authRouter) {
                 mainStarted = true
                 ApphudUserManager.shared.start()
             }

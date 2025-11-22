@@ -15,15 +15,42 @@ final class RegisterViewModel {
     var fioText = ""
     var mail = ""
     
+    var allCities: [String] = []
+    var searchText: String = ""
+    
     var isLoading: Bool = false
     var errorMessage: String? = nil
     
     private let coordinator: RegisterCoordinatorProtocol
     private let authEnd: () -> Void
     
+    enum Step {
+        case phone
+        case verify
+        case fio
+        case city
+        case done
+    }
+    
+    var step: Step = .phone
+
     init(coordinator: RegisterCoordinatorProtocol, authEnd: @escaping () -> Void) {
         self.coordinator = coordinator
         self.authEnd = authEnd
+        loadCities()
+    }
+    
+    func loadCities() {
+        guard let url = Bundle.main.url(forResource: "cities", withExtension: "json") else { return }
+        guard let data = try? Data(contentsOf: url) else { return }
+        guard let decoded = try? JSONDecoder().decode([String].self, from: data) else { return }
+
+        self.allCities = decoded
+    }
+
+    var filteredCities: [String] {
+        if searchText.isEmpty { return allCities }
+        return allCities.filter { $0.lowercased().contains(searchText.lowercased()) }
     }
     
     func start() {
@@ -60,35 +87,8 @@ final class RegisterViewModel {
                 
                 print(response)
                 
-                await continueTap(phone: formatted)
+                step = .done
                 isLoading = false
-            } catch {
-                isLoading = false
-                errorMessage = "Ошибка подключения. Попробуйте позже."
-                print("❌ Error:", error.localizedDescription)
-            }
-        }
-    }
-    
-    @MainActor
-    func continueTap(phone: String) {
-        Task {
-            do {
-                // 1️⃣ Очищаем номер от всего, кроме цифр
-                let digits = phone.filter { "0123456789".contains($0) }
-                
-                // 2️⃣ Формируем корректный формат
-                let formatted = digits.hasPrefix("7") ? "+\(digits)" : "+7\(digits)"
-                
-                print(formatted)
-                // 3️⃣ Отправляем на сервер
-                let response = try await NetworkManager.shared.authorizeAsync(phone: formatted)
-                
-                print("✅ Token:", response.access_token)
-                AuthStorage.shared.token = response.access_token
-                isLoading = false
-                
-                authEnd()
             } catch {
                 isLoading = false
                 errorMessage = "Ошибка подключения. Попробуйте позже."

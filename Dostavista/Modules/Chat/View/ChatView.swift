@@ -135,7 +135,7 @@ struct ChatView: View {
             .frame(maxWidth: .infinity)
             .background(.grayF2F2F2)
             .onAppear { scrollProxy = proxy }
-            .onChange(of: vm.messages.count) { _ in
+            .onChange(of: vm.messages.count) { _, _ in
                 if let last = vm.messages.last?.id {
                     withAnimation { proxy.scrollTo(last, anchor: .bottom) }
                 }

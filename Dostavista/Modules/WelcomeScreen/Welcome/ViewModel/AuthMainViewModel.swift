@@ -14,12 +14,8 @@ final class AuthMainViewModel {
     
     init(coordinator: AuthMainCoordinatorProtocol) {
         self.coordinator = coordinator
-        print("AuthMainViewModel")
     }
     
-    deinit {
-        print("AuthMainViewModel died")
-    }
     func signIn() {
         coordinator.goAuth()
     }
