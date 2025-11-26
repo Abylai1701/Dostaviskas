@@ -96,4 +96,29 @@ final class RegisterViewModel {
             }
         }
     }
+    
+    func auth() {
+        Task {
+            do {
+                // 1️⃣ Очищаем номер от всего, кроме цифр
+                let digits = phoneText.filter { "0123456789".contains($0) }
+                
+                // 2️⃣ Формируем корректный формат
+                let formatted = digits.hasPrefix("7") ? "+\(digits)" : "+7\(digits)"
+                
+                let response = try await NetworkManager.shared.authorizeAsync(phone: formatted)
+                
+                print("✅ Token:", response.access_token)
+                AuthStorage.shared.token = response.access_token
+                
+                await MainActor.run {
+                    authEnd()
+                }
+                
+            } catch {
+                errorMessage = "Ошибка подключения. Попробуйте позже."
+                print("❌ Error:", error.localizedDescription)
+            }
+        }
+    }
 }

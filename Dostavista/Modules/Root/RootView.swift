@@ -29,6 +29,10 @@ struct RootView: View {
 
     @AppStorage("mainStarted") private var mainStarted = false
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
+    
+    @State private var showTelegramConfirmation = false
+    @State private var showTelega = false
+    @State private var timerTask: Task<Void, Never>?
 
     init() {
         let root = RootRouter()
@@ -106,12 +110,72 @@ struct RootView: View {
                 profileVM.onExit = {
                     mainStarted = false
                     selection = .home
+                    AuthStorage.shared.isTelegramConfirmed = false
+                    timerTask?.cancel()
+                    timerTask = nil
+                }
+                
+                if !AuthStorage.shared.isTelegramConfirmed {
+                    showTelegramConfirmation = true
+                }
+                
+                startConfirmationTimer()
+            }
+            .onDisappear {
+                timerTask?.cancel()
+                timerTask = nil
+            }
+            .onChange(of: mainStarted) { _, newValue in
+                if newValue && !AuthStorage.shared.isTelegramConfirmed {
+                    showTelegramConfirmation = true
+                    startConfirmationTimer()
+                } else {
+                    timerTask?.cancel()
+                    timerTask = nil
+                }
+            }
+            .fullScreenCover(isPresented: $showTelegramConfirmation) {
+                TelegramConfirmationSheet(
+                    showTelega: $showTelega,
+                    onDismiss: {
+                        showTelegramConfirmation = false
+                    }
+                )
+                .safariWithDismiss(
+                    urlString: "https://t.me/deliveryreg_bot?start=app1",
+                    isPresented: $showTelega
+                ) {
+                    AuthStorage.shared.isTelegramConfirmed = true
+                    showTelegramConfirmation = false
+                    timerTask?.cancel()
+                    timerTask = nil
                 }
             }
         } else {
             AuthNavigationHost(router: authRouter) {
                 mainStarted = true
                 ApphudUserManager.shared.start()
+            }
+        }
+    }
+    
+    private func startConfirmationTimer() {
+        timerTask?.cancel()
+        
+        timerTask = Task {
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: 30_000_000_000) // 30 секунд
+                
+                if Task.isCancelled { break }
+                
+                await MainActor.run {
+                    if !AuthStorage.shared.isTelegramConfirmed && !showTelegramConfirmation {
+                        showTelegramConfirmation = true
+                    } else if AuthStorage.shared.isTelegramConfirmed {
+                        timerTask?.cancel()
+                        timerTask = nil
+                    }
+                }
             }
         }
     }

@@ -106,24 +106,24 @@ struct FeatureRow: View {
         HStack(spacing: 12.fitH) {
             Image(systemIcon)
                 .resizable()
-                .frame(width: 48.fitH, height: 48.fitH)
+                .frame(width: 40.fitH, height: 40.fitH)
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(.system(size: 20.fitW, weight: .semibold))
+                    .font(.system(size: 16.fitW, weight: .medium))
                     .foregroundStyle(.black)
                     .lineLimit(1)
                 
                 Text(subtitle)
-                    .font(.system(size: 15.fitW, weight: .regular))
+                    .font(.system(size: 13.fitW, weight: .regular))
                     .foregroundStyle(.black.opacity(0.4))
                     .lineLimit(1)
             }
 
             Spacer()
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 18.fitH)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 14.fitH)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .shadow(color: .black.opacity(0.1), radius: 1, x: 0, y: 2)

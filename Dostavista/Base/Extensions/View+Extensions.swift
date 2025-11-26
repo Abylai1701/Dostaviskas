@@ -28,6 +28,10 @@ extension View {
         modifier(SafariModifier(isPresented: isPresented, urlString: urlString))
     }
     
+    func safariWithDismiss(urlString: String?, isPresented: Binding<Bool>, onDismiss: (() -> Void)?) -> some View {
+        modifier(SafariModifier(isPresented: isPresented, urlString: urlString, onDismiss: onDismiss))
+    }
+    
     /// Открывает системное окно создания письма внутри приложения
     func mail(recipients: [String], subject: String, messageBody: String, isPresented: Binding<Bool>) -> some View {
         modifier(

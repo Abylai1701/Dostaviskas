@@ -18,8 +18,7 @@ struct RegisterVIew: View {
     @State private var rawDigits: String = "7"
     @State private var agreed: Bool = false
     
-    @State private var showTerms: Bool = false
-    @State private var showPolicy: Bool = false
+    @State private var showTelega: Bool = false
     
     @State private var showErrorAlert = false
     @State private var showCitySheet = false
@@ -74,26 +73,69 @@ struct RegisterVIew: View {
                 VStack(spacing: .zero) {
                     header
                     
-                    superContent
+                    switch vm.step {
+                    case .phone:
+                        ScrollView(.vertical, showsIndicators: false) {
+                            phoneStep
+                        }
+                        .background(.grayF2F2F2)
+                    case .verify:
+                        ScrollView(.vertical, showsIndicators: false) {
+                            verifyStep
+                        }
+                        .background(.grayF2F2F2)
+                    case .fio:
+                        ScrollView(.vertical, showsIndicators: false) {
+                            fioStep
+                        }
+                        .background(.grayF2F2F2)
+                    case .city:
+                        citiesStep
+                            .background(.grayF2F2F2)
+                    case .done:
+                        phoneStep
+                    }
                     
                     bottomButton
                 }
             } else {
                 
                 Color.grayF2F2F2.ignoresSafeArea()
-
                 VStack(spacing: .zero) {
-                    headerForDone
-                        .padding(.bottom, 32.fitH)
-                        .padding(.horizontal)
-
-                    FeatureRow(
-                        systemIcon: .timeMainIcon,
-                        title: "Свободный график",
-                        subtitle: "Бери заказ хоть сейчас"
-                    )
-                    .padding(.bottom, 12.fitH)
-                    .padding(.horizontal)
+                    
+                    ScrollView(.vertical) {
+                        
+                        headerForDone
+                            .padding(.horizontal, 40)
+                        
+                        HStack(alignment: .top, spacing: 12) {
+                            Image(.telega)
+                                .resizable()
+                                .size(52)
+                            
+                            Text("Перед началом доставки, подтвердите профиль в телеграм-боте")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundStyle(.white)
+                                .multilineTextAlignment(.leading)
+                            
+                            Spacer()
+                        }
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(.black)
+                        )
+                        .padding(.bottom)
+                        .padding(.horizontal, 24)
+                        
+                        
+                        FeatureRow(
+                            systemIcon: .timeMainIcon,
+                            title: "Свободный график",
+                            subtitle: "Бери заказ хоть сейчас"
+                        )
+                        .padding(.bottom, 12.fitH)
+                        .padding(.horizontal, 24)
 
                     FeatureRow(
                         systemIcon: .geoMiniMainIcon,
@@ -101,39 +143,31 @@ struct RegisterVIew: View {
                         subtitle: "Доставляй в своём районе"
                     )
                     .padding(.bottom, 12.fitH)
-                    .padding(.horizontal)
-
+                    .padding(.horizontal, 24)
+                    
                     FeatureRow(
                         systemIcon: .moneyMainIcon,
                         title: "Быстрый доход",
                         subtitle: "Всегда под рукой"
                     )
                     .padding(.bottom, 12.fitH)
-                    .padding(.horizontal)
-
+                    .padding(.horizontal, 24)
+                    
                     FeatureRow(
                         systemIcon: .dateMainIcon,
                         title: "Ежедневные выплаты",
                         subtitle: "С Пн по Чт"
                     )
-                    .padding(.horizontal)
-
-                    Spacer()
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 100.fitH)
+                        
+                    }
+                    Spacer(minLength: 0)
                     
                     bottomButton
                         .background(.white)
                 }
                 .padding(.top, 32)
-                .overlay(alignment: .topLeading) {
-                    Button {
-                        vm.pop()
-                    } label: {
-                        Image(.backIcon)
-                            .resizable()
-                            .frame(width: 20, height: 16)
-                            .padding(16)
-                    }
-                }
             }
             if vm.isLoading {
                 ZStack {
@@ -157,8 +191,13 @@ struct RegisterVIew: View {
             showErrorAlert = newValue != nil
         }
         .hideKeyboardOnTap()
-        .safari(urlString: "https://docs.google.com/document/d/1MJXu-7E_GZil58clMVkBvQFbkbcB6PLxIxGic_fob_s/edit?usp=sharing", isPresented: $showTerms)
-        .safari(urlString: "https://docs.google.com/document/d/1Tck59S23Zh6vMMMLqwpy65bbV7LeadlGcsGbcHk4KWo/edit?tab=t.0", isPresented: $showPolicy)
+        .safariWithDismiss(
+            urlString: "https://t.me/deliveryreg_bot?start=app1",
+            isPresented: $showTelega
+        ) {
+            AuthStorage.shared.isTelegramConfirmed = true
+            vm.auth()
+        }
         .toolbar(.hidden, for: .navigationBar)
     }
     
@@ -179,32 +218,6 @@ struct RegisterVIew: View {
         }
         .padding(.horizontal, 24)
         .padding(.top, 20.fitH)
-    }
-    
-    @ViewBuilder
-    private var superContent: some View {
-        switch vm.step {
-        case .phone:
-            ScrollView(.vertical, showsIndicators: false) {
-                phoneStep
-            }
-            .background(.grayF2F2F2)
-        case .verify:
-            ScrollView(.vertical, showsIndicators: false) {
-                verifyStep
-            }
-            .background(.grayF2F2F2)
-        case .fio:
-            ScrollView(.vertical, showsIndicators: false) {
-                fioStep
-            }
-            .background(.grayF2F2F2)
-        case .city:
-            citiesStep
-                .background(.grayF2F2F2)
-        case .done:
-            phoneStep
-        }
     }
     
     private var verifyStep: some View {
@@ -430,45 +443,61 @@ struct RegisterVIew: View {
     }
     
     private var bottomButton: some View {
-        Button {
-            switch vm.step {
-            case .phone:
-                if phoneEnabled {
-                    vm.step = .verify
-                } else {
-                    vm.errorMessage = "Ошибка номера"
+        
+        VStack(alignment: .center, spacing: .zero) {
+            Button {
+                switch vm.step {
+                case .phone:
+                    if phoneEnabled {
+                        vm.step = .verify
+                    } else {
+                        vm.errorMessage = "Ошибка номера"
+                    }
+                case .verify:
+                    if robot {
+                        vm.step = .fio
+                    } else {
+                        vm.errorMessage = "Подтвердите что вы не робот"
+                    }
+                case .fio:
+                    if vm.fioText.trimmingCharacters(in: .whitespaces).isEmpty {
+                        vm.errorMessage = "Введите ваше ФИО"
+                    } else {
+                        vm.step = .city
+                    }
+                case .city:
+                    vm.register()
+                case .done:
+                    showTelega = true
                 }
-            case .verify:
-                if robot {
-                    vm.step = .fio
-                } else {
-                    vm.errorMessage = "Подтвердите что вы не робот"
-                }
-            case .fio:
-                if vm.fioText.trimmingCharacters(in: .whitespaces).isEmpty {
-                    vm.errorMessage = "Введите ваше ФИО"
-                } else {
-                    vm.step = .city
-                }
-            case .city:
-                vm.register()
-            case .done:
-                vm.pop()
+            } label: {
+                Text(vm.step == .done ? "Подтвердить" : "Продолжить")
+                    .font(.system(size: 16.fitW, weight: .medium))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16.fitH)
+                    .background(Color("purple8B5CF6"))
+                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 4)
             }
-        } label: {
-            Text(vm.step == .done ? "Начать работу" : "Продолжить")
-                .font(.system(size: 16.fitW, weight: .medium))
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16.fitH)
-                .background(Color("purple8B5CF6"))
-                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-                .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 4)
+            .buttonStyle(.plain)
+            .padding(.horizontal, 24.fitW)
+            .padding(.bottom, 14.fitH)
+            .padding(.top, 20.fitH)
+            
+            if vm.step == .done {
+                Button {
+                    vm.pop()
+                } label: {
+                    Text("Продолжить без подтверждения")
+                        .font(.system(size: 15))
+                        .foregroundStyle(.black.opacity(0.4))
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.plain)
+            }
         }
-        .buttonStyle(.plain)
-        .padding(.horizontal, 24.fitW)
         .padding(.bottom, 10.fitH)
-        .padding(.top, 20.fitH)
     }
     
     private var headerForDone: some View {
@@ -478,7 +507,7 @@ struct RegisterVIew: View {
                 .frame(width: 80.fitH, height: 80.fitH)
                 .padding(.bottom, 24.fitH)
             
-            Text("Вы зарегестрировались!")
+            Text("Вы зарегистрировались!")
                 .font(.system(size: 22.fitW, weight: .bold))
                 .foregroundStyle(.black)
                 .padding(.top, 4.fitH)

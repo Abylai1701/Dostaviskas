@@ -12,6 +12,7 @@ struct SettingsView: View {
     @State var vm: SettingsViewModel
     @State private var showRate = false
     @State private var showPolicy: Bool = false
+    @State private var showTerms: Bool = false
     @State private var showAlert = false
 
     var onExit: () -> Void
@@ -33,6 +34,8 @@ struct SettingsView: View {
 
             Button {
                 onExit()
+                AuthStorage.shared.token = nil
+                AuthStorage.shared.isTelegramConfirmed = false
                 vm.pop()
             } label: {
                 Text("Удалить аккаунт")
@@ -48,7 +51,8 @@ struct SettingsView: View {
         .fullScreenCover(isPresented: $showRate) {
             RateSheet()
         }
-        .safari(urlString: "https://docs.google.com/document/d/1Tck59S23Zh6vMMMLqwpy65bbV7LeadlGcsGbcHk4KWo/edit?tab=t.0", isPresented: $showPolicy)
+        .safari(urlString: "https://docs.google.com/document/d/17e4wZQqOWohrcMw7gPxMxdtOrbDBR1cTdktjnq3fJ74/edit?tab=t.0", isPresented: $showPolicy)
+        .safari(urlString: "https://docs.google.com/document/d/1mjYIZDx4nG_EWMnGzIVArFQ1z2X7He7jNUkeEi8pSic/edit?usp=sharing", isPresented: $showTerms)
         .alert(isPresented: $showAlert) {
             return Alert(
                 title: Text("App version"),
@@ -138,6 +142,29 @@ struct SettingsView: View {
                         .size(42)
                     
                     Text("Политика конфиденциальности")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(.black)
+                    
+                    Spacer()
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 14)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(.white)
+                )
+            }
+            .buttonStyle(.plain)
+            
+            Button {
+                showTerms = true
+            } label: {
+                HStack(alignment: .center, spacing: 10) {
+                    Image(.policyIcon)
+                        .resizable()
+                        .size(42)
+                    
+                    Text("Условия")
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(.black)
                     

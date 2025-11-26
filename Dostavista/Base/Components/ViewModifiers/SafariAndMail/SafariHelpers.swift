@@ -16,11 +16,12 @@ struct SafariModifier: ViewModifier {
     @Binding var isPresented: Bool
     let urlString: String?
     
+    var onDismiss: (() -> Void)?
     // MARK: - Body
     
     func body(content: Content) -> some View {
         content
-            .sheet(isPresented: $isPresented) {
+            .sheet(isPresented: $isPresented, onDismiss: onDismiss) {
                 if let urlString, let url = URL(string: urlString) {
                     SafariView(url: url)
                 }

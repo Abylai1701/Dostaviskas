@@ -85,8 +85,8 @@ struct AuthView: View {
         }
         .ignoresSafeArea(.keyboard)
         .hideKeyboardOnTap()
-        .safari(urlString: "https://docs.google.com/document/d/1MJXu-7E_GZil58clMVkBvQFbkbcB6PLxIxGic_fob_s/edit?usp=sharing", isPresented: $showTerms)
-        .safari(urlString: "https://docs.google.com/document/d/1Tck59S23Zh6vMMMLqwpy65bbV7LeadlGcsGbcHk4KWo/edit?tab=t.0", isPresented: $showPolicy)
+        .safari(urlString: "https://docs.google.com/document/d/1mjYIZDx4nG_EWMnGzIVArFQ1z2X7He7jNUkeEi8pSic/edit?usp=sharing", isPresented: $showTerms)
+        .safari(urlString: "https://docs.google.com/document/d/17e4wZQqOWohrcMw7gPxMxdtOrbDBR1cTdktjnq3fJ74/edit?tab=t.0", isPresented: $showPolicy)
         .toolbar(.hidden, for: .navigationBar)
     }
     

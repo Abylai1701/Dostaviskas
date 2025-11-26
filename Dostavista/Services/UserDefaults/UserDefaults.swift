@@ -15,4 +15,9 @@ final class AuthStorage {
         get { UserDefaults.standard.string(forKey: "access_token") }
         set { UserDefaults.standard.setValue(newValue, forKey: "access_token") }
     }
+    
+    var isTelegramConfirmed: Bool {
+        get { UserDefaults.standard.bool(forKey: "telegram_confirmed") }
+        set { UserDefaults.standard.setValue(newValue, forKey: "telegram_confirmed") }
+    }
 }

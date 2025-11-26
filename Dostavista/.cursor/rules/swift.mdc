@@ -1,0 +1,77 @@
+---
+alwaysApply: true
+---
+
+# Swift / SwiftUI 17+ Rules
+
+## General
+- Используй только актуальный Swift (5.9+) и SwiftUI 17+ API.
+- Не придумывай функциональность или данные, которых нет в запросе.
+- Предпочитай детерминированные, предсказуемые решения.
+- Объясняй важные решения кратко и по делу.
+
+## Architecture
+- Основная архитектура: MVVM (View — UI, ViewModel — state/logic, Services — data).
+- Состояние — через @Observable, @State, @Binding, @Environment(\.modelContext).
+- Не смешивай бизнес-логику и UI.
+- Services должны быть stateless, с явными зависимостями.
+
+## File & Module Structure
+- Features/
+- Core/
+- UI/
+- Resources/
+- Models/
+- Services/
+- Router/Navigation/
+
+## Naming Conventions
+- camelCase для переменных и функций.
+- PascalCase для типов.
+- Методы — глаголы (fetchUser, loadItems).
+- Boolean — is/has/should.
+- Имена короткие, точные, однозначные.
+
+## Swift Best Practices
+- Предпочитай struct, class только при реальной необходимости.
+- let > var (используй var только если обязательно).
+- Опционалы — минимально, unwrap аккуратно.
+- Используй Result<> или чёткие enum Error типы.
+- async/await для всего асинхронного кода.
+- Не используй устаревшие API.
+
+## SwiftUI Guidelines (SUI 17+)
+- NavigationStack + navigationDestination.
+- List + ForEach.
+- Используй новые Observation API:
+  - @Observable
+  - @Bindable
+- Не используй NavigationView, @EnvironmentObject.
+- Layout через VStack/HStack/ZStack/Grid.
+- Анимации: withAnimation {} или .animation(value:).
+
+## UI Rules
+- Поддержка Dynamic Type.
+- SF Symbols.
+- Темная тема по умолчанию.
+- Избегай тяжёлых модификаторов в цепочке (раскидывай логически).
+
+## Networking
+- URLSession + async/await.
+- Codable-модели должны быть неизменяемыми.
+- Явно обрабатывай ошибки.
+- Не создавай лишних абстракций.
+
+## State Management
+- View не хранит состояние бизнес-логики.
+- ViewModel хранит только presentation state.
+- Не держи в ViewModel UI-компоненты.
+
+## Performance
+- Избегай тяжёлых вычислений в body.
+- Выноси вычисления в ViewModel.
+- Используй Equatable views для оптимизации.
+
+## Comments
+- Комментарии — только к нетривиальным решениям.
+- Без воды, без лишней документации.

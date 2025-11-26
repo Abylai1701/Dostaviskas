@@ -40,6 +40,7 @@ struct ProfileView: View {
                         Button {
                             vm.onExit()
                             AuthStorage.shared.token = nil
+                            AuthStorage.shared.isTelegramConfirmed = false
                         } label: {
                             Text("Выйти из аккаунта")
                                 .font(.system(size: 16, weight: .semibold))
