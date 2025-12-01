@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D5081C4B2EDD7B6B0054927A /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = D5081C4A2EDD7B6B0054927A /* FirebaseCore */; };
+		D5081C4D2EDD7B6B0054927A /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = D5081C4C2EDD7B6B0054927A /* FirebaseRemoteConfig */; };
 		D540AC632EC4D79D003D8309 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = D540AC622EC4D79D003D8309 /* Alamofire */; };
 		D5BC20DE2ECB4E4300C015DD /* ApphudSDK in Frameworks */ = {isa = PBXBuildFile; productRef = D5BC20DD2ECB4E4300C015DD /* ApphudSDK */; };
 /* End PBXBuildFile section */
@@ -42,7 +44,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D540AC632EC4D79D003D8309 /* Alamofire in Frameworks */,
+				D5081C4B2EDD7B6B0054927A /* FirebaseCore in Frameworks */,
 				D5BC20DE2ECB4E4300C015DD /* ApphudSDK in Frameworks */,
+				D5081C4D2EDD7B6B0054927A /* FirebaseRemoteConfig in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +91,8 @@
 			packageProductDependencies = (
 				D540AC622EC4D79D003D8309 /* Alamofire */,
 				D5BC20DD2ECB4E4300C015DD /* ApphudSDK */,
+				D5081C4A2EDD7B6B0054927A /* FirebaseCore */,
+				D5081C4C2EDD7B6B0054927A /* FirebaseRemoteConfig */,
 			);
 			productName = Dostavista;
 			productReference = D5C984022EBE0CAA00B4993B /* Dostavista.app */;
@@ -119,6 +125,7 @@
 			packageReferences = (
 				D540AC612EC4D79D003D8309 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				D5BC20DC2ECB4E4300C015DD /* XCRemoteSwiftPackageReference "ApphudSDK" */,
+				D5081C492EDD7B6B0054927A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D5C984032EBE0CAA00B4993B /* Products */;
@@ -290,7 +297,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cri.cour1er1umworkascour1er;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -325,7 +332,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cri.cour1er1umworkascour1er;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -366,6 +373,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D5081C492EDD7B6B0054927A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.6.0;
+			};
+		};
 		D540AC612EC4D79D003D8309 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -385,6 +400,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D5081C4A2EDD7B6B0054927A /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D5081C492EDD7B6B0054927A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		D5081C4C2EDD7B6B0054927A /* FirebaseRemoteConfig */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D5081C492EDD7B6B0054927A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfig;
+		};
 		D540AC622EC4D79D003D8309 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D540AC612EC4D79D003D8309 /* XCRemoteSwiftPackageReference "Alamofire" */;

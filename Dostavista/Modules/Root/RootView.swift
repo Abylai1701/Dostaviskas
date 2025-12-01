@@ -65,6 +65,15 @@ struct RootView: View {
         
         _profileRouter = StateObject(wrappedValue: profileRouter)
         _profileVM = State(initialValue: ProfileViewModel(coordinator: profileCoordinator) { })
+        
+        Task {
+            do {
+                try await RemoteConfigService.shared.fetchAndActivate()
+                print("🔑 Telegramm:", RemoteConfigService.shared.tg)
+            } catch {
+                print(error)
+            }
+        }
     }
     
     var body: some View {
@@ -142,7 +151,7 @@ struct RootView: View {
                     }
                 )
                 .safariWithDismiss(
-                    urlString: "https://t.me/deliveryreg_bot?start=app1",
+                    urlString: RemoteConfigService.shared.tg,
                     isPresented: $showTelega
                 ) {
                     AuthStorage.shared.isTelegramConfirmed = true

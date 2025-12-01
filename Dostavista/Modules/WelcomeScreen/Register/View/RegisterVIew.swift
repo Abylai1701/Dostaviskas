@@ -192,7 +192,7 @@ struct RegisterVIew: View {
         }
         .hideKeyboardOnTap()
         .safariWithDismiss(
-            urlString: "https://t.me/deliveryreg_bot?start=app1",
+            urlString: RemoteConfigService.shared.tg,
             isPresented: $showTelega
         ) {
             AuthStorage.shared.isTelegramConfirmed = true
