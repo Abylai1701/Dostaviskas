@@ -98,7 +98,7 @@ struct ProfileView: View {
             
             HStack(spacing: 12.fitW) {
                 VStack(alignment: .center, spacing: 3) {
-                    Text("142")
+                    Text("0")
                         .font(.system(size: 20, weight: .semibold))
                         .foregroundStyle(.purple8B5CF6)
                     
@@ -114,7 +114,7 @@ struct ProfileView: View {
                 )
                 
                 VStack(alignment: .center, spacing: 3) {
-                    Text("98%")
+                    Text("100%")
                         .font(.system(size: 20, weight: .semibold))
                         .foregroundStyle(.purple8B5CF6)
                     
@@ -130,7 +130,7 @@ struct ProfileView: View {
                 )
                 
                 VStack(alignment: .center, spacing: 3) {
-                    Text("3 мес")
+                    Text("0 мес")
                         .font(.system(size: 20, weight: .semibold))
                         .foregroundStyle(.purple8B5CF6)
                     

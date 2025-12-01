@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct WithdrawSheetView: View {
-    @State private var amount: String = "3120"
+    @State private var amount: String = "0"
     @State private var showAlert = false
     @State private var alertMessage = ""
     
@@ -93,7 +93,7 @@ struct WithdrawSheetView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, 12)
 
-                    Text("Доступно: 3,120 ₽ • Минимум: 1000 ₽")
+                    Text("Доступно: 0 ₽ • Минимум: 1000 ₽")
                         .font(.system(size: 13))
                         .foregroundStyle(.gray6B7280)
                 }

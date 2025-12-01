@@ -65,13 +65,13 @@ struct IncomeView: View {
                         .resizable()
                         .frame(width: 32.fitW, height: 32.fitW)
                     
-                    Text("+12")
+                    Text("+0")
                         .font(.system(size: 12.fitW))
                         .foregroundStyle(.green00D40E1A)
                 }
                 .padding(.bottom, 12)
                 
-                Text("142")
+                Text("0")
                     .font(.system(size: 17.fitW, weight: .semibold))
                     .foregroundStyle(.black)
                     .padding(.bottom, 8)
@@ -97,13 +97,13 @@ struct IncomeView: View {
                             .resizable()
                             .frame(width: 32.fitW, height: 32.fitW)
                         
-                        Text("+12")
+                        Text("+0")
                             .font(.system(size: 12.fitW))
                             .foregroundStyle(.green00D40E1A)
                     }
                     .padding(.bottom, 12)
                     
-                    Text("720₽")
+                    Text("0₽")
                         .font(.system(size: 17.fitW, weight: .semibold))
                         .foregroundStyle(.black)
                         .padding(.bottom, 8)
@@ -130,13 +130,13 @@ struct IncomeView: View {
                             .resizable()
                             .frame(width: 32.fitW, height: 32.fitW)
                         
-                        Text("+12")
+                        Text("+0")
                             .font(.system(size: 12.fitW))
                             .foregroundStyle(.green00D40E1A)
                     }
                     .padding(.bottom, 12)
                     
-                    Text("4.9")
+                    Text("5")
                         .font(.system(size: 17.fitW, weight: .semibold))
                         .foregroundStyle(.black)
                         .padding(.bottom, 8)
@@ -168,7 +168,7 @@ struct IncomeView: View {
                         .font(.system(size: 13))
                         .foregroundStyle(.black.opacity(0.4))
                     
-                    Text("15,680 ₽")
+                    Text("0 ₽")
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(.black)
                 }
@@ -192,7 +192,7 @@ struct IncomeView: View {
                         .font(.system(size: 13))
                         .foregroundStyle(.black.opacity(0.4))
                     
-                    Text("2000 ₽")
+                    Text("0 ₽")
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(.black)
                 }
@@ -216,7 +216,7 @@ struct IncomeView: View {
                         .font(.system(size: 13))
                         .foregroundStyle(.black.opacity(0.4))
                     
-                    Text("290 ₽")
+                    Text("0 ₽")
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(.black)
                 }
@@ -256,7 +256,7 @@ struct IncomeView: View {
                     .foregroundStyle(.white.opacity(0.8))
                 
                 HStack(alignment: .bottom, spacing: 6) {
-                    Text("3,120")
+                    Text("0")
                         .font(.system(size: 48, weight: .bold))
                         .foregroundStyle(.white)
                     

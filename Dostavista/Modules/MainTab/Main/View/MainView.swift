@@ -49,5 +49,8 @@ struct MainView: View {
             }
         }
         .toolbar(.hidden, for: .navigationBar)
+        .task {
+            await vm.onAppear()
+        }
     }
 }

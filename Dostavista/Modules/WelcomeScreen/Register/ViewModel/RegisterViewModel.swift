@@ -15,7 +15,7 @@ final class RegisterViewModel {
     var fioText = ""
     var mail = ""
     
-    var allCities: [String] = []
+    var allCities: [City] = []
     var searchText: String = ""
     
     var isLoading: Bool = false
@@ -23,7 +23,7 @@ final class RegisterViewModel {
     
     private let coordinator: RegisterCoordinatorProtocol
     private let authEnd: () -> Void
-    
+
     enum Step {
         case phone
         case verify
@@ -43,15 +43,16 @@ final class RegisterViewModel {
     func loadCities() {
         guard let url = Bundle.main.url(forResource: "cities", withExtension: "json") else { return }
         guard let data = try? Data(contentsOf: url) else { return }
-        guard let decoded = try? JSONDecoder().decode([String].self, from: data) else { return }
+        guard let decoded = try? JSONDecoder().decode([City].self, from: data) else { return }
 
         self.allCities = decoded
     }
 
-    var filteredCities: [String] {
+    var filteredCities: [City] {
         if searchText.isEmpty { return allCities }
-        return allCities.filter { $0.lowercased().contains(searchText.lowercased()) }
+        return allCities.filter { $0.name.lowercased().contains(searchText.lowercased()) }
     }
+
     
     func start() {
         coordinator.start()
@@ -121,4 +122,10 @@ final class RegisterViewModel {
             }
         }
     }
+}
+
+struct City: Decodable {
+    let name: String
+    let long: Double
+    let latt: Double
 }

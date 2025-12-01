@@ -349,18 +349,18 @@ struct RegisterVIew: View {
             // Список городов
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    ForEach(vm.filteredCities, id: \.self) { c in
+                    ForEach(vm.filteredCities, id: \.name) { c in
                         Button {
-                            vm.city = c
+                            vm.city = c.name
                         } label: {
                             HStack {
-                                Text(c)
+                                Text(c.name)
                                     .foregroundStyle(.black)
                                     .font(.system(size: 17, weight: .medium))
                                 
                                 Spacer()
                                 
-                                if vm.city == c {
+                                if vm.city == c.name {
                                     Image(.checkIcon)
                                         .resizable()
                                         .frame(width: 20, height: 20)
