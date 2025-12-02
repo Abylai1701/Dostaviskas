@@ -3,28 +3,28 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyA56jyToZcNI6smF9bWBNCZl_FL61RCGsA</string>
+	<string>AIzaSyAMbVEdnmxYT0MZU1XUIxJ9UfpzdtFsONU</string>
 	<key>GCM_SENDER_ID</key>
-	<string>961701427678</string>
+	<string>860396490634</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.cri.cour1er1umworkascour1er</string>
 	<key>PROJECT_ID</key>
-	<string>dostavka-c43b4</string>
+	<string>dostavista-a18a0</string>
 	<key>STORAGE_BUCKET</key>
-	<string>dostavka-c43b4.firebasestorage.app</string>
+	<string>dostavista-a18a0.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:961701427678:ios:267d089961b643a436454f</string>
+	<string>1:860396490634:ios:dae7be3ffcb2548e4d8273</string>
 </dict>
 </plist>
