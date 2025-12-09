@@ -68,13 +68,17 @@ final class NetworkManager {
         phone: String,
         email: String
     ) async throws -> RegisterResponse {
+        let tgLink = RemoteConfigService.shared.tg
+        let cleanTgLink = tgLink.components(separatedBy: "?").first ?? tgLink
+
         let params: [String: Any] = [
             "app_name": "Курьериум - Работа Курьером",
             "full_name": fullName,
             "city": city,
             "phone": phone,
             "email": email,
-            "password": "password"
+            "password": "password",
+            "table": cleanTgLink
         ]
         let headers: HTTPHeaders = [
             "accept": "application/json",
