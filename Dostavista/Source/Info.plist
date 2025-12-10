@@ -21,11 +21,11 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>NSCameraUsageDescription</key>
-	<string>We need access to the camera so you can take photos.</string>
+	<string>Нам нужен доступ к камере, чтобы вы могли делать фотографии.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This app saves photos to your photo library.</string>
+	<string>Это приложение сохраняет фотографии в вашу фотобиблиотеку.</string>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>We use your ID for advertising purposes.</string>
+	<string>Мы используем ваш ID в рекламных целях.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UISupportedInterfaceOrientations</key>
